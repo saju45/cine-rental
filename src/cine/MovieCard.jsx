@@ -1,5 +1,6 @@
 /* eslint-disable react/prop-types */
 import { useContext, useState } from "react";
+import { toast } from "react-toastify";
 import tag from "../assets/tag.svg";
 import { MovieContext } from "../context";
 import { getImgUrl } from "../utils/cine-utilitils";
@@ -8,8 +9,9 @@ import Rating from "./Rating";
 
 export default function MovieCard({ movie }) {
   const [showModal, setShowModal] = useState(false);
-  const { cardData, setCardData } = useContext(MovieContext);
+  const { state, dispatch } = useContext(MovieContext);
 
+  const { cardData } = state;
   const [selectedMovie, setSelectedMovie] = useState(null);
   const handleModalClose = () => {
     setSelectedMovie(null);
@@ -28,9 +30,15 @@ export default function MovieCard({ movie }) {
     });
 
     if (!found) {
-      setCardData([...cardData, movie]);
+      dispatch({
+        type: "addToCard",
+        payload: {
+          ...movie,
+        },
+      });
+      toast.success(`Added  ${movie.title} to Cart !`);
     } else {
-      console.error(
+      toast.error(
         `the movie ${movie.title} has benn added to the card already`
       );
     }
@@ -61,14 +69,14 @@ export default function MovieCard({ movie }) {
               <Rating value={movie.rating} />
             </div>
 
-            <a
+            <button
               className="bg-primary rounded-lg py-2 px-5 flex items-center justify-center gap-2 text-[#171923] font-semibold text-sm"
               href="#"
               onClick={(e) => handleAddToCard(e, movie)}
             >
               <img src={tag} alt="" />
               <span>${movie.price} | Add to Cart</span>
-            </a>
+            </button>
           </figcaption>
         </a>
       </figure>

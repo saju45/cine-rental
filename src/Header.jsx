@@ -8,9 +8,10 @@ import CardDetails from "./cine/CardDetails";
 import { MovieContext, ThemeContext } from "./context";
 export default function Header() {
   const [showCard, setShowCard] = useState(false);
-  const { cardData } = useContext(MovieContext);
+  const { state } = useContext(MovieContext);
   const { darkMode, setDarkMode } = useContext(ThemeContext);
 
+  const { cardData } = state;
   const handleCardClose = () => {
     setShowCard(false);
   };

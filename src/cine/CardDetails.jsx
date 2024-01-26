@@ -1,17 +1,26 @@
 import { useContext } from "react";
+import { toast } from "react-toastify";
 import deleLOgo from "../assets/delete.svg";
 import checkoutLogo from "../assets/icons/checkout.svg";
 import { MovieContext } from "../context";
+
 import { getImgUrl } from "../utils/cine-utilitils";
 
 /* eslint-disable no-unused-vars */
 /* eslint-disable react/prop-types */
 export default function CardDetails({ onClose }) {
-  const { cardData, setCardData } = useContext(MovieContext);
+  const { state, dispatch } = useContext(MovieContext);
+  const { cardData } = state;
 
   const handleDelete = (movieId) => {
     const filteredMovies = cardData.filter((movie) => movie.id !== movieId);
-    setCardData([...filteredMovies]);
+    dispatch({
+      type: "removeFromCard",
+      payload: {
+        id: movieId,
+      },
+    });
+    toast.success(`Removed from the card`);
   };
   return (
     <div className="fixed top-0 left-0 w-screen h-screen z-50 bg-black/60 backdrop-blur-sm">
